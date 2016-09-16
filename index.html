@@ -169,19 +169,20 @@ function init() {
     var state = vrHMD.getPose();
 
     if (state.orientation !== null) {
-      var h = state.orientation;
-      var q = new x3dom.fields.Quaternion(h[0], h[1], h[2], h[3]);
-
-      var aa = q.toAxisAngle();
-      viewpoint.setAttribute("orientation",
-        [aa[0].x, aa[0].y, aa[0].z, aa[1]].join(' '));
+      var o = state.orientation;
+      var ori = viewpoint.requestFieldRef('orientation');
+      ori.x = o[0];
+      ori.y = o[1];
+      ori.z = o[2];
+      ori.w = o[3];
+      viewpoint.releaseFieldRef('orientation');
     }
-
     if (state.position !== null) {
+      var p = state.position;
       var posi = viewpoint.requestFieldRef('position');
-      posi.x = _initialPosition.x + state.position[0];
-      posi.y = _initialPosition.y + state.position[1];
-      posi.z = _initialPosition.z + state.position[2];
+      posi.x = _initialPosition.x + p[0];
+      posi.y = _initialPosition.y + p[1];
+      posi.z = _initialPosition.z + p[2];
       viewpoint.releaseFieldRef('position');
     }
 
