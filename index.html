@@ -137,7 +137,7 @@ body {
       <shape>
         <appearance>
           <renderedtexture id="rtLeft" stereoMode="LEFT_EYE" update='ALWAYS'
-            dimensions='640 800 4' repeatS='false' repeatT='false'>
+            dimensions='1024 1024 4' repeatS='false' repeatT='false'>
             <viewpoint use='vp' containerfield='viewpoint'></viewpoint>
             <background use='bgnd' containerfield='background'></background>
             <group use='theScene' containerfield="scene"></group>
@@ -182,7 +182,7 @@ body {
       <shape>
         <appearance>
           <renderedtexture id="rtRight" stereoMode="RIGHT_EYE" update='ALWAYS'
-          dimensions='640 800 4' repeatS='false' repeatT='false'>
+          dimensions='1024 1024 4' repeatS='false' repeatT='false'>
             <viewpoint use='vp' containerfield='viewpoint'></viewpoint>
             <background use='bgnd' containerfield='background'></background>
             <group use='theScene' containerfield="scene"></group>
@@ -222,8 +222,9 @@ body {
 <script>
 
 var runtime = null;
+
 var rtLeft, rtRight;
-var lastW, lastH;
+var renderScale = 0.5;
 
 var vrHMD = null;
 
@@ -235,19 +236,7 @@ function init() {
   rtLeft = document.getElementById(ns+'rtLeft');
   rtRight = document.getElementById(ns+'rtRight');
 
-  // TODO: get these from HMD
-  var scale = 1.0
-
-  lastW = runtime.getWidth();
-  lastH = runtime.getHeight();
-
-  var hw = Math.round(lastW / 2);
-  rtLeft.setAttribute('dimensions',  hw + ' ' + lastH + ' 4');
-  rtRight.setAttribute('dimensions', hw + ' ' + lastH + ' 4');
-
   var viewpoint = document.getElementById('vpp');
-
-  var i = 0;
 
   //runtime.enterFrame = enterFrame;
 
@@ -348,14 +337,22 @@ function vrDisplayCallback(vrdisplays) {
   rightTranslation = rightEyeParams.offset;
   console.log(leftTranslation);
   console.log(rightTranslation);
+
+  //modifyRTs(leftEyeParams, rightEyeParams);
+}
+
+function modifyRTs(lEyeParams, rEyeParams) {
+  var lW = Math.round(lEyeParams.renderWidth * renderScale);
+  var lH = Math.round(lEyeParams.renderHeight * renderScale);
+  var rW = Math.round(rEyeParams.renderWidth * renderScale);
+  var rH = Math.round(rEyeParams.renderHeight * renderScale);
+
+  rtLeft.setAttribute('dimensions',  lW + ' ' + lH + ' 4');
+  rtRight.setAttribute('dimensions', rH + ' ' + rH + ' 4');
 }
 
 // start
-setTimeout(function(){
-
-  init();
-
-}, 1000);
+document.addEventListener('load', init);
 
 </script>
 </body>
