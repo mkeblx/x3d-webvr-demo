@@ -152,6 +152,8 @@ function init() {
 
   var viewpoint = document.getElementById('vpp');
 
+  var _initialPosition = viewpoint.getFieldValue('position');
+
   //runtime.enterFrame = enterFrame;
 
   requestAnimationFrame(enterFrame);
@@ -175,13 +177,11 @@ function init() {
         [aa[0].x, aa[0].y, aa[0].z, aa[1]].join(' '));
     }
 
-    // TODO: add parent container so don't need to reference initialPosition?
-    var initialPosition = [4.17102, 1.00905, -6.97228];
     if (state.position !== null) {
       var posi = viewpoint.requestFieldRef('position');
-      posi.x = initialPosition[0]+ state.position[0];
-      posi.y = initialPosition[1] + state.position[1];
-      posi.z = initialPosition[2] + state.position[2];
+      posi.x = _initialPosition.x + state.position[0];
+      posi.y = _initialPosition.y + state.position[1];
+      posi.z = _initialPosition.z + state.position[2];
       viewpoint.releaseFieldRef('position');
     }
 
