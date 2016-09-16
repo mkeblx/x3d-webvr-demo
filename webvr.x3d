@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE X3D PUBLIC "ISO//Web3D//DTD X3D 3.0//EN" "http://www.web3d.org/specifications/x3d-3.0.dtd">
+<X3D xmlns:xsd='http://www.w3.org/2001/XMLSchema-instance' profile='Full' version='3.0' xsd:noNamespaceSchemaLocation='http://www.web3d.org/specifications/x3d-3.0.xsd'>
+  <scene DEF='scene1'>
+
+  <group id="stereo" render="false">
+    <group def='left'>
+      <shape>
+        <appearance>
+          <renderedtexture id="rtLeft" stereoMode="LEFT_EYE" update='ALWAYS'
+            dimensions='640 800 4' repeatS='false' repeatT='false'>
+            <viewpoint use='vp' containerfield='viewpoint'></viewpoint>
+            <background use='bgnd' containerfield='background'></background>
+            <group use='theScene' containerfield="scene"></group>
+          </renderedtexture>
+          <composedshader>
+            <field name='tex' type='SFInt32' value='0'></field>
+            <shaderpart type='VERTEX'>
+            attribute vec3 position;
+            attribute vec2 texcoord;
+
+            uniform mat4 modelViewProjectionMatrix;
+            varying vec2 fragTexCoord;
+
+            void main()
+            {
+              vec2 pos = sign(position.xy);
+              fragTexCoord = texcoord;
+
+              gl_Position = vec4((pos.x - 1.0) / 2.0, pos.y, 0.0, 1.0);
+            }
+            </shaderpart>
+            <shaderpart def="frag" type='FRAGMENT'>
+            #ifdef GL_ES
+            precision highp float;
+            #endif
+
+            uniform sampler2D tex;
+            varying vec2 fragTexCoord;
+
+            void main()
+            {
+              gl_FragColor = texture2D(tex, fragTexCoord);
+            }
+            </shaderpart>
+          </composedshader>
+        </appearance>
+        <plane solid="false"></plane>
+      </shape>
+    </group>
+
+    <group def='right'>
+      <shape>
+        <appearance>
+          <renderedtexture id="rtRight" stereoMode="RIGHT_EYE" update='ALWAYS'
+          dimensions='640 800 4' repeatS='false' repeatT='false'>
+            <viewpoint use='vp' containerfield='viewpoint'></viewpoint>
+            <background use='bgnd' containerfield='background'></background>
+            <group use='theScene' containerfield="scene"></group>
+          </renderedtexture>
+          <composedshader>
+            <field name='tex' type='SFInt32' value='0'></field>
+            <shaderpart type='VERTEX'>
+            attribute vec3 position;
+            attribute vec2 texcoord;
+
+            uniform mat4 modelViewProjectionMatrix;
+            varying vec2 fragTexCoord;
+
+            void main()
+            {
+              vec2 pos = sign(position.xy);
+              fragTexCoord = texcoord;
+
+              gl_Position = vec4((pos.x + 1.0) / 2.0, pos.y, 0.0, 1.0);
+            }
+            </shaderpart>
+            <shaderpart use="frag" type='FRAGMENT'>
+            </shaderpart>
+          </composedshader>
+        </appearance>
+        <plane solid="false"></plane>
+      </shape>
+    </group>
+  </group>
+
+
+  </scene>
+</X3D>
