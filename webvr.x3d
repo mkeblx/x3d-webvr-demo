@@ -1,13 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE X3D PUBLIC "ISO//Web3D//DTD X3D 3.0//EN" "http://www.web3d.org/specifications/x3d-3.0.dtd">
-<X3D xmlns:xsd='http://www.w3.org/2001/XMLSchema-instance' profile='Full' version='3.0' xsd:noNamespaceSchemaLocation='http://www.web3d.org/specifications/x3d-3.0.xsd'>
-  <scene DEF='scene1'>
-
-  <group id="stereo" render="false">
+<!-- TODO: un-hardcode params, set/inject; namespace;  -->
+  <group id="Webvr__stereoRt" render="true">
     <group def='left'>
       <shape>
         <appearance>
-          <renderedtexture id="rtLeft" stereoMode="LEFT_EYE" update='ALWAYS'
+          <renderedtexture id="Webvr__rtLeft" stereoMode="LEFT_EYE" update='ALWAYS'
             dimensions='640 800 4' repeatS='false' repeatT='false'>
             <viewpoint use='vp' containerfield='viewpoint'></viewpoint>
             <background use='bgnd' containerfield='background'></background>
@@ -52,7 +48,7 @@
     <group def='right'>
       <shape>
         <appearance>
-          <renderedtexture id="rtRight" stereoMode="RIGHT_EYE" update='ALWAYS'
+          <renderedtexture id="Webvr__rtRight" stereoMode="RIGHT_EYE" update='ALWAYS'
           dimensions='640 800 4' repeatS='false' repeatT='false'>
             <viewpoint use='vp' containerfield='viewpoint'></viewpoint>
             <background use='bgnd' containerfield='background'></background>
@@ -83,7 +79,3 @@
       </shape>
     </group>
   </group>
-
-
-  </scene>
-</X3D>
