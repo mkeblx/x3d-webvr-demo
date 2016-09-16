@@ -28,7 +28,7 @@ body {
   padding: 0;
 }
 
-#enterVR {
+#enter-vr-btn {
   background: rgba(0, 0, 0, .35) url("icon-goggles-white.svg") 50% 50% no-repeat;
   background-size: 70% 70%;
   color: #fff;
@@ -43,7 +43,7 @@ body {
   cursor: pointer;
 }
 
-#enterVR:hover {
+#enter-vr-btn:hover {
   background-color: rgba(120, 120, 120, .65);
 }
 
@@ -133,9 +133,6 @@ body {
 </scene>
 </x3d>
 
-
-<button id="enterVR"></button>
-
 <script>
 
 var runtime = null;
@@ -207,7 +204,11 @@ function init() {
     console.error('No WebVR 1.0 support');
   }
 
-  var enterVRBtn = document.getElementById('enterVR');
+
+  // inject button
+  var enterVRBtn = document.createElement('button');
+  enterVRBtn.setAttribute('id', 'enter-vr-btn');
+  document.body.appendChild(enterVRBtn);
   enterVRBtn.addEventListener('click', function(event){
     enterVR();
   });
@@ -269,24 +270,30 @@ function modifyRTs(lEyeParams, rEyeParams) {
 }
 
 // start
-document.addEventListener('load', function(){
+window.addEventListener('load', function ld(){
+  window.removeEventListener('load', ld);
 
-  var client = new XMLHttpRequest();
-  client.open('GET', 'webvr.x3d');
-  client.onreadystatechange = function() {
-    var text = client.responseText;
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', 'webvr.x3d');
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === XMLHttpRequest.DONE) {
+      if (xhr.status === 200) {
+        var text = xhr.responseText;
 
-    var node = document.createElement('group');
-    node.innerHTML = text;
+        var node = document.createElement('group');
+        node.innerHTML = text;
 
-    var scene = document.getElementById('scene');
-    scene.appendChild(node);
+        var scene = document.getElementById('scene');
+        scene.appendChild(node);
 
-    init();
+        init();
+      } else {
+        console.log('error: could not load webvr.x3d');
+      }
+    }
   }
-  client.send();
 
-//init();
+  xhr.send();
 
 });
 
