@@ -62,6 +62,10 @@ function init() {
 
   var _initialPosition = viewpoint.getFieldValue('position');
 
+
+  disableControls();
+
+
   //runtime.enterFrame = enterFrame;
 
   requestAnimationFrame(enterFrame);
@@ -181,4 +185,20 @@ function modifyRTs(lEyeParams, rEyeParams) {
 
   rtLeft.setAttribute('dimensions',  lW + ' ' + lH + ' ' + color_depth);
   rtRight.setAttribute('dimensions', rH + ' ' + rH + ' ' + color_depth);
+}
+
+var _navType = "";
+function disableControls() {
+  var navs = document.getElementsByTagName('navigationInfo');
+  if (navs.length) {
+    _navType = navs[0].getAttribute('type');
+    navs[0].setAttribute('type', '');
+  }
+}
+
+function enableControls() {
+  var navs = document.getElementsByTagName('navigationInfo');
+  if (navs.length) {
+    navs[0].setAttribute('type', _navType);
+  }
 }
