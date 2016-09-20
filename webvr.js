@@ -7,6 +7,49 @@ var renderScale = 0.5;
 
 var vrHMD = null;
 
+var WebVRSupport = {};
+
+function initWebVR() {
+  console.log('Initialize WebVR support');
+
+  if (document.readyState === 'complete') {
+    load();
+  } else {
+    window.addEventListener('load', function ld(){
+      window.removeEventListener('load', ld);
+      load();
+    });
+  }
+}
+
+WebVRSupport.initialize = initWebVR;
+
+function load() {
+  console.log('Load external webvr.x3d dependency');
+
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', 'webvr.x3d');
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === XMLHttpRequest.DONE) {
+      if (xhr.status === 200) {
+        var text = xhr.responseText;
+
+        var node = document.createElement('group');
+        node.innerHTML = text;
+
+        var scene = document.getElementById('scene');
+        scene.appendChild(node);
+
+        init();
+      } else {
+        console.log('error: could not load webvr.x3d');
+      }
+    }
+  }
+
+  xhr.send();
+}
+
 function init() {
   runtime = document.getElementById('x3dElement').runtime;
 
@@ -139,31 +182,3 @@ function modifyRTs(lEyeParams, rEyeParams) {
   rtLeft.setAttribute('dimensions',  lW + ' ' + lH + ' ' + color_depth);
   rtRight.setAttribute('dimensions', rH + ' ' + rH + ' ' + color_depth);
 }
-
-// start
-window.addEventListener('load', function ld(){
-  window.removeEventListener('load', ld);
-
-  var xhr = new XMLHttpRequest();
-  xhr.open('GET', 'webvr.x3d');
-  xhr.onreadystatechange = function() {
-    if (xhr.readyState === XMLHttpRequest.DONE) {
-      if (xhr.status === 200) {
-        var text = xhr.responseText;
-
-        var node = document.createElement('group');
-        node.innerHTML = text;
-
-        var scene = document.getElementById('scene');
-        scene.appendChild(node);
-
-        init();
-      } else {
-        console.log('error: could not load webvr.x3d');
-      }
-    }
-  }
-
-  xhr.send();
-
-});
