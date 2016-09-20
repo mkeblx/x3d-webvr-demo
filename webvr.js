@@ -134,8 +134,10 @@ function modifyRTs(lEyeParams, rEyeParams) {
   var rW = Math.round(rEyeParams.renderWidth * renderScale);
   var rH = Math.round(rEyeParams.renderHeight * renderScale);
 
-  rtLeft.setAttribute('dimensions',  lW + ' ' + lH + ' 4');
-  rtRight.setAttribute('dimensions', rH + ' ' + rH + ' 4');
+  var color_depth = '4';
+
+  rtLeft.setAttribute('dimensions',  lW + ' ' + lH + ' ' + color_depth);
+  rtRight.setAttribute('dimensions', rH + ' ' + rH + ' ' + color_depth);
 }
 
 // start
