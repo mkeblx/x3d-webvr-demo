@@ -15,6 +15,9 @@ var _scene = "scene";
 
 var _x3dEl = "x3d-elem";
 
+var viewpoint;
+var _initialPosition;
+
 /*
 options
 */
@@ -47,6 +50,9 @@ WebVRSupport.initialize = _initialize;
 
 function load() {
   console.log('Load external webvr.x3d dependency');
+
+  viewpoint = document.getElementById(_viewpoint);
+  _initialPosition = viewpoint.getFieldValue('position');
 
   var xhr = new XMLHttpRequest();
   xhr.open('GET', 'webvr.x3d');
@@ -84,10 +90,6 @@ function init() {
   ns = "Webvr__";
   rtLeft = document.getElementById(ns+'rtLeft');
   rtRight = document.getElementById(ns+'rtRight');
-
-  var viewpoint = document.getElementById('vpp');
-
-  var _initialPosition = viewpoint.getFieldValue('position');
 
 
   disableControls();
