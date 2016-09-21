@@ -13,6 +13,8 @@ var _viewpoint = "viewpoint";
 var _background = "background";
 var _scene = "scene";
 
+var _x3dEl = "x3d-elem";
+
 /*
 options
 */
@@ -27,6 +29,9 @@ function _initialize( options ) {
     _scene = options.scene;
   if (options.renderScale)
     _renderScale = options.renderScale;
+
+  if (options.x3dEl)
+    _x3dEl = options.x3dEl;
 
   if (document.readyState === 'complete') {
     load();
@@ -73,7 +78,7 @@ function load() {
 }
 
 function init() {
-  runtime = document.getElementById('x3dElement').runtime;
+  runtime = document.getElementById(_x3dEl).runtime;
 
   var ns = "";
   ns = "Webvr__";
