@@ -3,7 +3,7 @@
 var runtime = null;
 
 var rtLeft, rtRight;
-var renderScale = 0.5; // 1
+var _renderScale = 0.5; // 1
 
 var vrHMD = null;
 
@@ -25,6 +25,8 @@ function _initialize( options ) {
     _background = options.background;
   if (options.scene)
     _scene = options.scene;
+  if (options.renderScale)
+    _renderScale = options.renderScale;
 
   if (document.readyState === 'complete') {
     load();
@@ -209,10 +211,10 @@ function vrDisplayCallback(vrdisplays) {
 }
 
 function modifyRTs(lEyeParams, rEyeParams) {
-  var lW = Math.round(lEyeParams.renderWidth * renderScale);
-  var lH = Math.round(lEyeParams.renderHeight * renderScale);
-  var rW = Math.round(rEyeParams.renderWidth * renderScale);
-  var rH = Math.round(rEyeParams.renderHeight * renderScale);
+  var lW = Math.round(lEyeParams.renderWidth * _renderScale);
+  var lH = Math.round(lEyeParams.renderHeight * _renderScale);
+  var rW = Math.round(rEyeParams.renderWidth * _renderScale);
+  var rH = Math.round(rEyeParams.renderHeight * _renderScale);
 
   var color_depth = '4';
 
