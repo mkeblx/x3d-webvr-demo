@@ -3,17 +3,28 @@
 var runtime = null;
 
 var rtLeft, rtRight;
-var renderScale = 0.5;
+var renderScale = 0.5; // 1
 
 var vrHMD = null;
 
 var WebVRSupport = {};
+
+var _viewpoint = "viewpoint";
+var _background = "background";
+var _scene = "scene";
 
 /*
 options
 */
 function _initialize( options ) {
   console.log('Initialize WebVR support');
+
+  if (options.viewpoint)
+    _viewpoint = options.viewpoint;
+  if (options.background)
+    _background = options.background;
+  if (options.scene)
+    _scene = options.scene;
 
   if (document.readyState === 'complete') {
     load();
@@ -36,6 +47,12 @@ function load() {
     if (xhr.readyState === XMLHttpRequest.DONE) {
       if (xhr.status === 200) {
         var text = xhr.responseText;
+
+        text = text.replace(/\$VIEWPOINT/g, _viewpoint);
+        text = text.replace(/\$BACKGROUND/g, _background);
+        text = text.replace(/\$SCENE/g, _scene);
+
+        console.log(text);
 
         var node = document.createElement('group');
         node.innerHTML = text;

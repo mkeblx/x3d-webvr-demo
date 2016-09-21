@@ -133,10 +133,13 @@ body {
 </scene>
 </x3d>
 
-<!-- Add below to scene to enable WebVR -->
 <script src="webvr.js"></script>
 <script>
-WebVRSupport.initialize();
+WebVRSupport.initialize({
+  viewpoint: 'vp',
+  background: 'bgnd',
+  scene: 'theScene'
+});
 </script>
 
 </body>
