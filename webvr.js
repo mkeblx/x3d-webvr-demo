@@ -9,7 +9,10 @@ var vrHMD = null;
 
 var WebVRSupport = {};
 
-function initWebVR() {
+/*
+options
+*/
+function _initialize( options ) {
   console.log('Initialize WebVR support');
 
   if (document.readyState === 'complete') {
@@ -22,7 +25,7 @@ function initWebVR() {
   }
 }
 
-WebVRSupport.initialize = initWebVR;
+WebVRSupport.initialize = _initialize;
 
 function load() {
   console.log('Load external webvr.x3d dependency');
@@ -70,12 +73,13 @@ function init() {
 
   requestAnimationFrame(enterFrame);
 
+  // update viewpoint based on HMD pose
   function enterFrame() {
     if (!vrHMD) {
       window.requestAnimationFrame(enterFrame);
       return;
     } else {
-      vrHMD.requestAnimationFrame(enterFrame);
+      vrHMD.requestAnimationFrame(enterFrame); // native framerate if presenting
     }
 
     var state = vrHMD.getPose();
@@ -117,7 +121,7 @@ function init() {
   }
 
 
-  // inject button
+  // inject enter/exit VR button
   var enterVRBtn = document.createElement('button');
   enterVRBtn.setAttribute('id', 'enter-vr-btn');
   document.body.appendChild(enterVRBtn);
@@ -131,15 +135,27 @@ function isWebVRSupported() {
   return ('getVRDisplays' in navigator);
 }
 
+// toggles
 function enterVR() {
   if (!vrHMD) {
     console.log('No VR headset attached');
     return;
   }
 
-  var canvas = document.getElementsByTagName("canvas")[0];
-  vrHMD.requestPresent( [ { source: canvas } ] );
+  if (!vrHMD.isPresenting) {
+    var canvas = document.getElementsByTagName("canvas")[0];
+    vrHMD.requestPresent( [ { source: canvas } ] )
+      .then(function(){
+        console.log('Started VR presenting');
+    });
+  } else {
+    vrHMD.exitPresent().then(function(){
+      console.log('Exited VR presenting');
+    });
+  }
 }
+
+WebVRSupport.enterVR = enterVR;
 
 function vrDisplayCallback(vrdisplays) {
   if (vrdisplays.length) {
