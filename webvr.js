@@ -1,4 +1,5 @@
 /* */
+(function(){
 
 var runtime = null;
 
@@ -8,12 +9,15 @@ var _renderScale = 0.5; // 1
 var vrHMD = null;
 
 var WebVRSupport = {};
+window.WebVRSupport = WebVRSupport;
 
+// defaults element ids/defs
 var _viewpoint = "viewpoint";
 var _background = "background";
 var _scene = "scene";
 
 var _x3dEl = "x3d-elem";
+
 
 var viewpoint;
 var _initialPosition;
@@ -22,7 +26,7 @@ var _initialPosition;
 options
 */
 function _initialize( options ) {
-  console.log('Initialize WebVR support');
+  _log('Initialize WebVR support');
 
   if (options.viewpoint)
     _viewpoint = options.viewpoint;
@@ -49,7 +53,7 @@ function _initialize( options ) {
 WebVRSupport.initialize = _initialize;
 
 function load() {
-  console.log('Load external webvr.x3d dependency');
+  _log('Load external webvr.x3d dependency');
 
   viewpoint = document.getElementById(_viewpoint);
   _initialPosition = viewpoint.getFieldValue('position');
@@ -65,8 +69,6 @@ function load() {
         text = text.replace(/\$BACKGROUND/g, _background);
         text = text.replace(/\$SCENE/g, _scene);
 
-        console.log(text);
-
         var node = document.createElement('group');
         node.innerHTML = text;
 
@@ -75,7 +77,7 @@ function load() {
 
         init();
       } else {
-        console.log('error: could not load webvr.x3d');
+        _log('error: could not load webvr.x3d');
       }
     }
   }
@@ -164,7 +166,7 @@ function isWebVRSupported() {
 // toggles
 function enterVR() {
   if (!vrHMD) {
-    console.log('No VR headset attached');
+    _log('No VR headset attached');
     return;
   }
 
@@ -172,11 +174,11 @@ function enterVR() {
     var canvas = document.getElementsByTagName("canvas")[0];
     vrHMD.requestPresent( [ { source: canvas } ] )
       .then(function(){
-        console.log('Started VR presenting');
+        _log('Started VR presenting');
     });
   } else {
     vrHMD.exitPresent().then(function(){
-      console.log('Exited VR presenting');
+      _log('Exited VR presenting');
     });
   }
 }
@@ -186,9 +188,9 @@ WebVRSupport.enterVR = enterVR;
 function vrDisplayCallback(vrdisplays) {
   if (vrdisplays.length) {
     vrHMD = vrdisplays[0];
-    console.log(vrHMD);
+    _log(vrHMD);
   } else {
-    console.log('NO VRDisplay found');
+    _log('NO VRDisplay found');
     alert("Didn't find a VR display!");
     return;
   }
@@ -199,20 +201,20 @@ function vrDisplayCallback(vrdisplays) {
 
   leftEyeParams = vrHMD.getEyeParameters("left");
   rightEyeParams = vrHMD.getEyeParameters("right");
-  console.log(leftEyeParams);
-  console.log(rightEyeParams);
+  _log(leftEyeParams);
+  _log(rightEyeParams);
 
   leftFOV = leftEyeParams.fieldOfView;
   rightFOV = rightEyeParams.fieldOfView;
-  console.log(leftFOV);
-  console.log(rightFOV);
+  _log(leftFOV);
+  _log(rightFOV);
 
   // TODO: use to updated views
   // -currently using default in x3dom: 0.064 IPD
   leftTranslation = leftEyeParams.offset;
   rightTranslation = rightEyeParams.offset;
-  console.log(leftTranslation);
-  console.log(rightTranslation);
+  _log(leftTranslation);
+  _log(rightTranslation);
 
   //modifyRTs(leftEyeParams, rightEyeParams);
 }
@@ -244,3 +246,11 @@ function enableControls() {
     navs[0].setAttribute('type', _navType);
   }
 }
+
+var enableLogging = true;
+function _log() {
+  if (!enableLogging) return;
+  console.log.apply(console, arguments);
+}
+
+})();
