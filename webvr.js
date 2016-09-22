@@ -7,6 +7,11 @@ var _renderScale = 0.5; // 1
 
 var vrHMD = null;
 
+var frameData = null;
+if ('VRFrameData' in window) {
+  frameData = new VRFrameData();
+}
+
 var WebVRSupport = {};
 window.WebVRSupport = WebVRSupport;
 
@@ -113,7 +118,7 @@ function init() {
       vrHMD.requestAnimationFrame(enterFrame); // native framerate if presenting
     }
 
-    var state = vrHMD.getPose();
+    var state = getPose(vrHMD);
 
     if (state.orientation !== null) {
       var o = state.orientation;
@@ -164,6 +169,17 @@ function init() {
 
 function isWebVRSupported() {
   return ('getVRDisplays' in navigator);
+}
+
+function getPose(vrDisplay) {
+  var pose = null;
+  if (vrDisplay.getFrameData) { // '1.1'
+    vrDisplay.getFrameData(frameData);
+    pose = frameData.pose;
+  } else if (vrDisplay.getPose) { // deprecated
+    pose = vrDisplay.getPose();
+  }
+  return pose;
 }
 
 // toggles
