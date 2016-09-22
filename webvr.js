@@ -1,4 +1,3 @@
-/* */
 (function(){
 
 var runtime = null;
@@ -11,7 +10,7 @@ var vrHMD = null;
 var WebVRSupport = {};
 window.WebVRSupport = WebVRSupport;
 
-// defaults element ids/defs
+// defaults element IDs/defs, normally always passed
 var _viewpoint = "viewpoint";
 var _background = "background";
 var _scene = "scene";
@@ -56,6 +55,10 @@ function load() {
   _log('Load external webvr.x3d dependency');
 
   viewpoint = document.getElementById(_viewpoint);
+  if (viewpoint === null) {
+    console.log('viewpoint ID: ' + _viewpoint + ' not found');
+    return;
+  }
   _initialPosition = viewpoint.getFieldValue('position');
 
   var xhr = new XMLHttpRequest();
